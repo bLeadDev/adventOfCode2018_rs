@@ -8,7 +8,7 @@ use std::{io::{self, Read, Error}, str::{Lines, FromStr}, error};
 use std::collections::HashSet;
 
 fn read_file_to_vec<T>(file_name: &str) -> Vec<T>
-where //needed traits to work with the cheap .expect error handling
+where //needed traits to work with the cheap .expect error "handling"
     T: std::str::FromStr,
     <T as FromStr>::Err: Debug,
 {
@@ -26,9 +26,12 @@ where //needed traits to work with the cheap .expect error handling
 
 fn main() {
     /* DAY 01 */
-    let lines = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\advent_of_code\\src\\input.txt");
+    //local path
+    //let lines = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\advent_of_code\\src\\input_day1.txt");
+    //codespace path
+    let lines = read_file_to_vec("/workspaces/adventOfCode2018_rs/advent_of_code/src/input_day1.txt");
     let sum: i32 = lines.iter().sum();
-    println!("Sum of day 1 is: {sum}");
+    println!("Frequency of task 1 is: {sum}");
 
     let mut seen_frequencies: HashSet<i32> = HashSet::new();
     let mut actual_frequency = 0;
@@ -41,5 +44,11 @@ fn main() {
             }
         }
     }
-    println!("Frequency of day 2 is: {actual_frequency}");
+    println!("Frequency of task 2 is: {actual_frequency}");
+
+
+    /* DAY02 */
+    let lines = read_file_to_vec("/workspaces/adventOfCode2018_rs/advent_of_code/src/input_day2.txt");
+    let char_count: HashMap<char, i32> = lines
+
 }
