@@ -7,6 +7,7 @@ use core::fmt::Debug;
 use std::{io::{self, Read, Error}, str::{Lines, FromStr}, error, ops::Index};
 use std::collections::HashSet;
 use std::collections::HashMap;
+use strsim::levenshtein;
 
 fn read_file_to_vec<T>(file_name: &str) -> Vec<T>
 where //needed traits to work with the cheap .expect error "handling"
@@ -24,6 +25,27 @@ where //needed traits to work with the cheap .expect error "handling"
     .collect()
 }
 
+fn cmp_str_only_one_differs(str1: &str, str2: &str) -> bool{
+    let mut one_error_found = false;
+    for (ch1, ch2) in str1.chars().zip(str2.chars()) {
+        if ch1 != ch2 && one_error_found == false{
+            one_error_found = true;
+        }else if ch1 != ch2 {
+            return false;
+        }
+    }
+    return true;
+}
+
+fn extract_differing_char(str1 :&str, str2: &str) -> Option<String>{
+    for (ch1, ch2) in str1.chars().zip(str2.chars()) {
+        if ch1 != ch2{
+            //delete ch1 out of new_string
+            return Some(str1.chars().filter(|&x| x != ch1).collect());
+        }
+    }
+    None
+}
 
 fn main() {
     /* DAY 01 */
@@ -49,7 +71,7 @@ fn main() {
     println!("Frequency of task 2 is: {actual_frequency}");
  */
 
-    /* DAY02 */
+    /* DAY02 Task 1*/
     let lines: Vec<String> = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\src\\input_day2.txt");
 
     let mut chars_in_words:  Vec<HashMap<char, i32>> = vec![];
@@ -68,24 +90,39 @@ fn main() {
     let mut count_of_three_letter_words  = 0;
     let mut count_of_two_letter_words    = 0;
     for word_char_count in chars_in_words{
-        let values = word_char_count.values();
-        let filtered = values.filter(|&x| *x == 3);
-        if filtered.count() > 0{
+        if word_char_count.values()
+            .filter(|&x| *x == 3)
+            .count() > 0{
             count_of_three_letter_words += 1;
         } 
-
-
-        let values = word_char_count.values();
-        //println!("values:\n{:#?}", values);
-        let filtered = values.filter(|&x| *x == 2);
-        //println!("filtered:\n{:#?}", filtered);
-        if filtered.count() > 0{
+        if word_char_count.values()
+            .filter(|&x| *x == 2)
+            .count() > 0{
             count_of_two_letter_words += 1;
         } 
-        //println!("Count: {:#?}", cnt);
     }
     
-    println!("Two letter words: {} Should be 244\nThree letter words: {} Should be 22", count_of_three_letter_words, count_of_two_letter_words);
     println!("Solution for Day02, Task1: {}", count_of_three_letter_words * count_of_two_letter_words);
+
+    /* DAY02 Task 2 */
+    // Only consider distance 1 strings
+
+    let lines: Vec<String> = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\src\\input_day2.txt");
+
+    for line in &lines{
+        for inner_line in &lines{
+            if inner_line != line && levenshtein(&line, &inner_line) == 1{
+                if cmp_str_only_one_differs(&line, &inner_line){
+                    let solution_day_2_2 = extract_differing_char(&line, &inner_line);
+                    //println!("Solution Day 02, Task 2: {}", solution_day_2_2.unwrap_or_default());
+                    assert_eq!("cvgywxqubnuaefmsljdrpfzyi", solution_day_2_2.unwrap());
+               };
+            }
+        }   
+    };
+
+
+
+
 
 }
