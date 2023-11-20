@@ -50,21 +50,42 @@ fn main() {
  */
 
     /* DAY02 */
-    let lines: Vec<String> = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\advent_of_code\\src\\input_day2.txt");
+    let lines: Vec<String> = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\src\\input_day2.txt");
 
-    let words: HashMap<char, usize>;
+    let mut chars_in_words:  Vec<HashMap<char, i32>> = vec![];
     for line in lines{
-        //count the char count for each char and each (word/line)
-        let chars = line.chars();
-        let filtered = chars.filter(|&c| c.is_alphabetic()); // Filter out non-alphabetic characters
-        let converted = filtered.map(|c| c.to_ascii_lowercase()) ;// Convert characters to lowercase
-        let folded = converted
-        .fold(HashMap::new(), |mut counts, c| 
-        {
-            *counts.entry(c).or_insert(0) += 1; // Count occurrences of each character
-            counts
-        });
-        println!("{:#?}", folded.index());
+        let chars: HashMap<char, i32> = line
+            .chars()
+            .fold(HashMap::new(), |mut counts, c| 
+            {
+                *counts.entry(c).or_insert(0) += 1; // Count occurrences of each character
+                counts
+            });
+        chars_in_words.push(chars);
     }
+
+    //words where a duplet or triplet of characters only occure once 
+    let mut count_of_three_letter_words  = 0;
+    let mut count_of_two_letter_words    = 0;
+    for word_char_count in chars_in_words{
+        let values = word_char_count.values();
+        let filtered = values.filter(|&x| *x == 3);
+        if filtered.count() > 0{
+            count_of_three_letter_words += 1;
+        } 
+
+
+        let values = word_char_count.values();
+        //println!("values:\n{:#?}", values);
+        let filtered = values.filter(|&x| *x == 2);
+        //println!("filtered:\n{:#?}", filtered);
+        if filtered.count() > 0{
+            count_of_two_letter_words += 1;
+        } 
+        //println!("Count: {:#?}", cnt);
+    }
+    
+    println!("Two letter words: {} Should be 244\nThree letter words: {} Should be 22", count_of_three_letter_words, count_of_two_letter_words);
+    println!("Solution for Day02, Task1: {}", count_of_three_letter_words * count_of_two_letter_words);
 
 }
