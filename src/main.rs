@@ -25,7 +25,7 @@ where //needed traits to work with the cheap .expect error "handling"
     .collect()
 }
 
-fn cmp_str_only_one_differs(str1: &str, str2: &str) -> bool{
+fn cmp_str_only_one_differs_same_pos(str1: &str, str2: &str) -> bool{
     let mut one_error_found = false;
     for (ch1, ch2) in str1.chars().zip(str2.chars()) {
         if ch1 != ch2 && one_error_found == false{
@@ -37,7 +37,7 @@ fn cmp_str_only_one_differs(str1: &str, str2: &str) -> bool{
     return true;
 }
 
-fn extract_differing_char(str1 :&str, str2: &str) -> Option<String>{
+fn extract_differing_char_ret_string_without(str1 :&str, str2: &str) -> Option<String>{
     for (ch1, ch2) in str1.chars().zip(str2.chars()) {
         if ch1 != ch2{
             //delete ch1 out of new_string
@@ -48,7 +48,7 @@ fn extract_differing_char(str1 :&str, str2: &str) -> Option<String>{
 }
 
 fn main() {
-    /* DAY 01 */
+    /* DAY 01 TASK 1*/
     //local path
     //let lines = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\advent_of_code\\src\\input_day1.txt");
     //codespace path
@@ -57,6 +57,7 @@ fn main() {
     let sum: i32 = lines.iter().sum();
     println!("Frequency of task 1 is: {sum}");
 
+    /* DAY 01 TASK 2*/
     let mut seen_frequencies: HashSet<i32> = HashSet::new();
     let mut actual_frequency = 0;
     'duplicate_found: loop{
@@ -71,7 +72,7 @@ fn main() {
     println!("Frequency of task 2 is: {actual_frequency}");
  */
 
-    /* DAY02 Task 1*/
+    /* DAY02 TASK 1*/
     let lines: Vec<String> = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\src\\input_day2.txt");
 
     let mut chars_in_words:  Vec<HashMap<char, i32>> = vec![];
@@ -104,25 +105,17 @@ fn main() {
     
     println!("Solution for Day02, Task1: {}", count_of_three_letter_words * count_of_two_letter_words);
 
-    /* DAY02 Task 2 */
-    // Only consider distance 1 strings
-
+    /* DAY02 TASK 2 */
     let lines: Vec<String> = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\src\\input_day2.txt");
 
-    for line in &lines{
+    'outer_loop: for line in &lines{
         for inner_line in &lines{
-            if inner_line != line && levenshtein(&line, &inner_line) == 1{
-                if cmp_str_only_one_differs(&line, &inner_line){
-                    let solution_day_2_2 = extract_differing_char(&line, &inner_line);
-                    //println!("Solution Day 02, Task 2: {}", solution_day_2_2.unwrap_or_default());
-                    assert_eq!("cvgywxqubnuaefmsljdrpfzyi", solution_day_2_2.unwrap());
-               };
+            if inner_line != line && cmp_str_only_one_differs_same_pos(&line, &inner_line){
+                let solution_day_2_2 = extract_differing_char_ret_string_without(&line, &inner_line);
+                println!("Solution Day 02, Task 2: {}", solution_day_2_2.unwrap());
+                println!("Solution REAL         is cvgywxqubnuaefmsljdrpfzyi");
+                //break 'outer_loop;
             }
         }   
-    };
-
-
-
-
-
+    }
 }
