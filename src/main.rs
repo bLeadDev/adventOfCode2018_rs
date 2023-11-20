@@ -4,7 +4,7 @@
 
 use std::fs::{File, self};
 use core::fmt::Debug;
-use std::{io::{self, Read, Error}, str::{Lines, FromStr, pattern::CharArrayRefSearcher}, error};
+use std::{io::{self, Read, Error}, str::{Lines, FromStr}, error, ops::Index};
 use std::collections::HashSet;
 use std::collections::HashMap;
 
@@ -30,6 +30,7 @@ fn main() {
     //local path
     //let lines = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\advent_of_code\\src\\input_day1.txt");
     //codespace path
+/*     
     let lines = read_file_to_vec("/workspaces/adventOfCode2018_rs/advent_of_code/src/input_day1.txt");
     let sum: i32 = lines.iter().sum();
     println!("Frequency of task 1 is: {sum}");
@@ -46,16 +47,24 @@ fn main() {
         }
     }
     println!("Frequency of task 2 is: {actual_frequency}");
-
+ */
 
     /* DAY02 */
-    let lines: Vec<String> = read_file_to_vec("/workspaces/adventOfCode2018_rs/advent_of_code/src/input_day2.txt");
+    let lines: Vec<String> = read_file_to_vec("C:\\bLeadDev\\adventOfCode2018_rs\\advent_of_code\\src\\input_day2.txt");
+
     let words: HashMap<char, usize>;
     for line in lines{
         //count the char count for each char and each (word/line)
-        let chaaars = line.chars();
-        let foldingThing = chaaars.fold();
-        
+        let chars = line.chars();
+        let filtered = chars.filter(|&c| c.is_alphabetic()); // Filter out non-alphabetic characters
+        let converted = filtered.map(|c| c.to_ascii_lowercase()) ;// Convert characters to lowercase
+        let folded = converted
+        .fold(HashMap::new(), |mut counts, c| 
+        {
+            *counts.entry(c).or_insert(0) += 1; // Count occurrences of each character
+            counts
+        });
+        println!("{:#?}", folded.index());
     }
 
 }
