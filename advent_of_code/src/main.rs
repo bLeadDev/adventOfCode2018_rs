@@ -4,8 +4,9 @@
 
 use std::fs::{File, self};
 use core::fmt::Debug;
-use std::{io::{self, Read, Error}, str::{Lines, FromStr}, error};
+use std::{io::{self, Read, Error}, str::{Lines, FromStr, pattern::CharArrayRefSearcher}, error};
 use std::collections::HashSet;
+use std::collections::HashMap;
 
 fn read_file_to_vec<T>(file_name: &str) -> Vec<T>
 where //needed traits to work with the cheap .expect error "handling"
@@ -48,7 +49,13 @@ fn main() {
 
 
     /* DAY02 */
-    let lines = read_file_to_vec("/workspaces/adventOfCode2018_rs/advent_of_code/src/input_day2.txt");
-    let char_count: HashMap<char, i32> = lines
+    let lines: Vec<String> = read_file_to_vec("/workspaces/adventOfCode2018_rs/advent_of_code/src/input_day2.txt");
+    let words: HashMap<char, usize>;
+    for line in lines{
+        //count the char count for each char and each (word/line)
+        let chaaars = line.chars();
+        let foldingThing = chaaars.fold();
+        
+    }
 
 }
